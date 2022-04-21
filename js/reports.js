@@ -1,3 +1,6 @@
+'use strict';
+
+
 const burger = {
     node: document.querySelector('.function_burger'),
     state: true,
@@ -10,6 +13,7 @@ const burger = {
         }
     }
 }
+const container = document.querySelector('.container')
 const functionsBlock = document.querySelector('.function_open')
 const content = document.querySelector('.content')
 const reports = document.querySelector('.reports')
@@ -23,6 +27,9 @@ const buttonOk = document.querySelector('.modal-window_button-ok')
 const coks = document.querySelector('.coke')
 const modalOk = document.querySelector('.ok')
 let report
+const loadingInterval = setInterval(() => {
+    loading(container.children[0], loadingInterval)
+}, 500)
 
 
 buttonOk.addEventListener('click', changeModalWindowState)
@@ -40,14 +47,21 @@ fetch('http://localhost:17627/api/user-credentials', {
     }
 }).then((response) => {
     if (response.ok){
+        for (let item of container.children) {
+            if (item.className === 'loading') {
+                item.style.display = 'none'
+                continue
+            }
+            item.style.display = 'flex'
+        }
         return response.text()
     } else {
-        //window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
+        window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
     }
 }).then((body) => {
     name.innerHTML = body
 }).catch(() => {
-    //window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
+    window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
 })
 
 
@@ -106,4 +120,12 @@ async function sendReport() {
     setTimeout(() => {
         coks.style.pointerEvents = 'auto'
     }, 2000)
+}
+
+function loading(loading) {
+    if (loading.querySelector('.loading-content span').innerHTML.length < 3) {
+        loading.querySelector('.loading-content span').append('.')
+    } else {
+        loading.querySelector('.loading-content span').innerHTML = ''
+    }
 }

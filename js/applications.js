@@ -1,3 +1,6 @@
+'use strict';
+
+
 const content = document.querySelector('.content')
 const container = document.querySelector('.container')
 const table = document.querySelector('.table')

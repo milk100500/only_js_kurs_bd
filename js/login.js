@@ -24,7 +24,7 @@ function updateForm() {
 
 
 function sendLoginFunction() {
-    fetch('http://localhost:63342/only_js_kurs_bd/html/xyi',
+    fetch('http://localhost:63342/only_js_kurs_bd/html/file',
         {
             method: 'POST',
             headers: {

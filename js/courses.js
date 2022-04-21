@@ -1,3 +1,6 @@
+'use strict';
+
+
 const container = document.querySelector('.container')
 const functionsBlock = document.querySelector('.function_open');
 const burger = {
@@ -32,21 +35,21 @@ fetch('http://localhost:17627/api/user-credentials', {
     }
 }).then((response) => {
     if (response.ok) {
+        for (let item of container.children) {
+            if (item.className === 'loading') {
+                item.style.display = 'none'
+                continue
+            }
+            item.style.display = 'flex'
+        }
         return response.text()
     } else {
-        //window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
+        window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
     }
 }).then((body) => {
     name.innerHTML = body
 }).catch(() => {
-    for (let item of container.children) {
-        if (item.className === 'loading') {
-            item.style.display = 'none'
-            continue
-        }
-        item.style.display = 'flex'
-    }
-    //window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
+    window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
 }).finally(() => {
     clearInterval(loadingInterval)
 })

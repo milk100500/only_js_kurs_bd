@@ -1,7 +1,10 @@
+'use strict';
+
+
 let stock = ['Атмосфера ВТ!!!', 'Дэн дэн дэн', 'Apple', 'Gazprom']
-const container = document.querySelector('.container')
 let stockName;
 let stockPrice;
+const container = document.querySelector('.container')
 const burger = {
     node: document.querySelector('.function_burger'),
     state: true,
@@ -61,6 +64,8 @@ fetch('http://localhost:17627/api/user-credentials', {
     name.innerHTML = body
 }).catch(() =>{
     window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
+}).finally(() => {
+    clearInterval(loadingInterval)
 })
 
 
