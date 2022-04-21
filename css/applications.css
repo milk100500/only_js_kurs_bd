@@ -51,7 +51,7 @@
     background-color: rgba(0,0,0, 0.7);
 }
 .head-content{
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     font-size: 45px;
@@ -102,7 +102,7 @@
 }
 
 .work-content{
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
 }
@@ -197,6 +197,16 @@
     font-size: 25px;
     margin-top: 25px;
 }
+.loading{
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+}
+
+.loading-content span{
+}
+
 
 @keyframes change_ok {
     from {

@@ -51,8 +51,8 @@
     margin: 0 auto;
     background-color: rgba(0,0,0, 0.7);
 }
-.content_head{
-    display: flex;
+.head-content{
+    display: none;
     justify-content: center;
     align-items: center;
     font-size: 45px;
@@ -107,7 +107,7 @@
 }
 
 .work-content{
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
 }
@@ -231,6 +231,17 @@ input[type=number] {
         transform: scale(1);
     }
 }
+
+.loading{
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+}
+
+.loading-content span{
+}
+
 @keyframes coks_move {
     from {
         transform: rotate(-10deg);

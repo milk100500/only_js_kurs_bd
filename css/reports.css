@@ -212,7 +212,7 @@
     height: 300px;
 }
 
-.content_head{
+.head-content{
     display: flex;
     justify-content: center;
     color: white;

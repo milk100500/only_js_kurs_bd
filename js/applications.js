@@ -1,13 +1,14 @@
 const content = document.querySelector('.content')
+const container = document.querySelector('.container')
 const table = document.querySelector('.table')
 const ok = document.querySelector('.ok')
 const krest = document.querySelector('.krest')
-const modal_window_result = document.querySelector('.modal_window_result')
+const modalWindowResult = document.querySelector('.modal_window_result')
 const exit = document.querySelector('.function_open_exit')
 const name = document.querySelector('.name')
 const burger = {
     node: document.querySelector('.function_burger'),
-    state: false,
+    state: true,
     changeState(){
         this.state = !this.state
         if (this.state){
@@ -18,9 +19,12 @@ const burger = {
     }
 }
 const functionsBlock = document.querySelector('.function_open')
+const loadingInterval = setInterval(() => {
+    loading(container.children[0], loadingInterval)
+}, 500)
 
 
-burger.addEventListener('click', () => {burger.changeState()})
+burger.node.addEventListener('click', () => {burger.changeState()})
 exit.addEventListener('click', () => {burger.changeState()})
 
 
@@ -32,13 +36,26 @@ fetch('http://localhost:17627/api/user-credentials', {
     }
 }).then((response) => {
     if (response.ok){
+        for (let item of container.children) {
+            if (item.className === 'loading') {
+                item.style.display = 'none'
+                continue
+            }
+            item.style.display = 'flex'
+        }
         return response.text()
     } else {
         window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
     }
 }).then((body) => {
     name.innerHTML = body
+}).catch(() =>{
+    window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
+}).finally(() => {
+    clearInterval(loadingInterval)
 })
+
+
 fetch('http://localhost:17627/api/application', {
     method: 'GET',
     headers: {
@@ -52,33 +69,33 @@ fetch('http://localhost:17627/api/application', {
         window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
     }
 }).then((body) => {
-    add_row(body)
+    addRow(body)
 })
 
 
-function add_row(body) {
+function addRow(body) {
     let row
-    let text_row
+    let textRow
     body.forEach(elem => {
         row = document.createElement('div')
         row.className = 'row'
-        text_row = '<span class="id">' + elem['id'] + '</span>' + '<span class="name">' + elem['name'] + '</span>' + '<span class="surname">' + elem['surname'] + '</span>' + '<span class="phone">' + elem['phoneNumber'] + '</span>' + '<span class="education">' + elem['education'] + '</span>' + '<span class="about">' + elem['aboutYourself'] + '</span>' +
+        textRow = '<span class="id">' + elem['id'] + '</span>' + '<span class="name">' + elem['name'] + '</span>' + '<span class="surname">' + elem['surname'] + '</span>' + '<span class="phone">' + elem['phoneNumber'] + '</span>' + '<span class="education">' + elem['education'] + '</span>' + '<span class="about">' + elem['aboutYourself'] + '</span>' +
             '<span class="responses"><img class="ok" src="../content/ok.png"/><img class="krest" src="../content/krest2.png"/></span>'
-        row.innerHTML = text_row
+        row.innerHTML = textRow
         table.append(row)
     })
 }
 document.onclick = function( e ) {
     if (e.target.className === 'ok') {
-        send_result(true, e)
+        sendResult(true, e)
     }
     if (e.target.className === 'krest'){
-        send_result(false, e)
+        sendResult(false, e)
     }
 }
-function send_result(result, e) {
+function sendResult(result, e) {
     let id = e.target.parentElement.parentElement.querySelector('.id').innerHTML
-    send_result_func(id, result, e)
+    sendResultFunc(id, result, e)
     e.target.parentElement.parentElement.style.pointerEvents = 'none'
     e.target.style.transform = 'scale(1.5)'
     setTimeout(() => {
@@ -86,12 +103,12 @@ function send_result(result, e) {
     }, 300)
 }
 
-function send_result_func(id, result, e) {
-    let result_str
+function sendResultFunc(id, result, e) {
+    let resultStr
     if (result){
-        result_str = 'true'
+        resultStr = 'true'
     } else {
-        result_str = 'false'
+        resultStr = 'false'
     }
     fetch('http://localhost:17627/api/application/' + id, {
         method: 'DELETE',
@@ -99,44 +116,44 @@ function send_result_func(id, result, e) {
             'Content-Type': 'application/json;charset=utf-8',
             'Authorization': sessionStorage.getItem('token')
         },
-        body: JSON.stringify({'reason': result_str})
+        body: JSON.stringify({'reason': resultStr})
     }).then((response) => {
         if (response.ok){
-            open_modal_window_result(result, e)
+            openModalWindowResult(result, e)
         } else {
-            open_modal_window_result("Что-то пошло не так", e)
+            openModalWindowResult("Что-то пошло не так", e)
         }
     }).catch(() => {
-        open_modal_window_result("Что-то пошло не так", e)
+        openModalWindowResult("Что-то пошло не так", e)
     })
 }
 
-function open_modal_window_result(result, e) {
+function openModalWindowResult(result, e) {
     if (typeof result === 'string') {
-        change_modal_window_result('#ca1413 solid 10px', '../content/problema.jpg', result, false, e)
+        changeModalWindowResult('#ca1413 solid 10px', '../content/problema.jpg', result, false, e)
     } else {
         if (result) {
-            change_modal_window_result('#2ecc71 solid 10px', '../content/prinat.jpg', 'Ублюдок принят на работу',
+            changeModalWindowResult('#2ecc71 solid 10px', '../content/prinat.jpg', 'Ублюдок принят на работу',
                 true, e)
         } else {
-            change_modal_window_result('#ca1413 solid 10px', '../content/neprinat.jpg', 'Ублюдок не принят на работу',
+            changeModalWindowResult('#ca1413 solid 10px', '../content/neprinat.jpg', 'Ублюдок не принят на работу',
                 true, e)
         }
     }
     setTimeout(() => {
-        modal_window_result.style.opacity = '1'
+        modalWindowResult.style.opacity = '1'
     }, 1000)
     setTimeout(() => {
-        modal_window_result.style.opacity = '0'
+        modalWindowResult.style.opacity = '0'
         e.target.parentElement.parentElement.style.pointerEvents = 'auto'
     }, 2500)
 }
 
-function change_modal_window_result(border, img, text, result_anim, e) {
+function changeModalWindowResult(border, img, text, result_anim, e) {
     if (result_anim) {
-        modal_window_result.style.border = border
-        modal_window_result.querySelector('.modal_window_result_img').src = img
-        modal_window_result.querySelector('.modal_window_result_text').innerHTML = text
+        modalWindowResult.style.border = border
+        modalWindowResult.querySelector('.modal_window_result_img').src = img
+        modalWindowResult.querySelector('.modal_window_result_text').innerHTML = text
         setTimeout(() => {
             e.target.parentElement.parentElement.style.transform = 'scale(0)'
         }, 400)
@@ -144,8 +161,16 @@ function change_modal_window_result(border, img, text, result_anim, e) {
             e.target.parentElement.parentElement.remove()
         }, 800)
     } else {
-        modal_window_result.style.border = border
-        modal_window_result.querySelector('.modal_window_result_img').src = img
-        modal_window_result.querySelector('.modal_window_result_text').innerHTML = text
+        modalWindowResult.style.border = border
+        modalWindowResult.querySelector('.modal_window_result_img').src = img
+        modalWindowResult.querySelector('.modal_window_result_text').innerHTML = text
+    }
+}
+
+function loading(loading) {
+    if (loading.querySelector('.loading-content span').innerHTML.length < 3) {
+        loading.querySelector('.loading-content span').append('.')
+    } else {
+        loading.querySelector('.loading-content span').innerHTML = ''
     }
 }

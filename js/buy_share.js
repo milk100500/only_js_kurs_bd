@@ -1,4 +1,5 @@
 let stock = ['Атмосфера ВТ!!!', 'Дэн дэн дэн', 'Apple', 'Gazprom', 'Леха бомжара', 'Леха воняет']
+const container = document.querySelector('.container')
 let stockName;
 let stockPrice;
 const burger = {
@@ -19,6 +20,9 @@ const coke = document.querySelector('.coke')
 const stockInput = document.querySelector('#input_stock')
 const stockInputPrice = document.querySelector('.input_price')
 const modalOk = document.querySelector('.modal-ok')
+const loadingInterval = setInterval(() => {
+    loading(container.children[0], loadingInterval)
+}, 500)
 
 
 burger.node.addEventListener('click', () => {burger.changeState()})
@@ -42,12 +46,21 @@ fetch('http://localhost:17627/api/user-credentials', {
     }
 }).then((response) => {
     if (response.ok){
+        for (let item of container.children) {
+            if (item.className === 'loading') {
+                item.style.display = 'none'
+                continue
+            }
+            item.style.display = 'flex'
+        }
         return response.text()
     } else {
         window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
     }
 }).then((body) => {
     name.innerHTML = body
+}).catch(() =>{
+    window.location.replace('https://se.ifmo.ru/~s286535/html/login.html')
 })
 
 
@@ -169,4 +182,12 @@ function changeModalOk(url, result) {
     setTimeout(() => {
         coke.style.pointerEvents = 'auto'
     }, 3000)
+}
+
+function loading(loading) {
+    if (loading.querySelector('.loading-content span').innerHTML.length < 3) {
+        loading.querySelector('.loading-content span').append('.')
+    } else {
+        loading.querySelector('.loading-content span').innerHTML = ''
+    }
 }
