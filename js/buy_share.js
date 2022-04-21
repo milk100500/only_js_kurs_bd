@@ -1,4 +1,4 @@
-let stock = ['Атмосфера ВТ!!!', 'Дэн дэн дэн', 'Apple', 'Gazprom', 'Леха бомжара', 'Леха воняет']
+let stock = ['Атмосфера ВТ!!!', 'Дэн дэн дэн', 'Apple', 'Gazprom']
 const container = document.querySelector('.container')
 let stockName;
 let stockPrice;
